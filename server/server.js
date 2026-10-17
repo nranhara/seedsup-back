@@ -7,27 +7,35 @@ const supplierRoutes = require("./routes/supplierRoutes");
 
 const app = express();
 
-app.use(cors({
-    origin: "http://localhost:5173"
-}));
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
+);
+
+// app.use(cors({
+//     origin: "http://localhost:5173"
+// }));
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("API Running Successfully");
+  res.send("API Running Successfully");
 });
 
 // routes
 app.use("/api/suppliers", supplierRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
+  // MongoDB Connection
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
     console.log("MongoDB Connected");
-
-    app.listen(5001, () => {
-        console.log("Server Running on Port 5001");
-    });
-})
-.catch((error) => {
+  })
+  .catch((error) => {
     console.log(error);
-});
+  });
+
+module.exports = app;
